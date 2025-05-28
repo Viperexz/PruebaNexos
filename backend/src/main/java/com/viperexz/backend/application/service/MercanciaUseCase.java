@@ -10,6 +10,7 @@ import com.viperexz.backend.domain.service.MercanciaService;
 import com.viperexz.backend.exception.BusinessException;
 import com.viperexz.backend.exception.NotFoundException;
 import com.viperexz.backend.interfaces.rest.mapper.MercanciaMapper;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -33,12 +34,14 @@ public class MercanciaUseCase {
         this.mercanciaService = mercanciaService;
     }
 
+    @Transactional
     public MercanciaResponseDTO consultarPorId(Long idUsuario) {
         Mercancia mercancia = mercanciaRepository.findById(idUsuario)
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
         return mapper.toResponseDTO(mercancia);
     }
 
+    @Transactional
     public List<MercanciaResponseDTO> consultarTodos() {
         List<Mercancia> mercancia = mercanciaRepository.findAll();
         return mercancia.stream()
@@ -46,6 +49,7 @@ public class MercanciaUseCase {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public MercanciaResponseDTO registrarMercancia(MercanciaRequestDTO dto) {
         Usuario usuario = usuarioRepository.findById(dto.getIdUsuario())
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
@@ -62,7 +66,7 @@ public class MercanciaUseCase {
         Mercancia guardada = mercanciaRepository.save(mercancia);
         return mapper.toResponseDTO(guardada);
     }
-
+    @Transactional
     public MercanciaResponseDTO actualizarMercancia(MercanciaRequestDTO dto, Long idMercancia) {
         Mercancia mercancia = mercanciaRepository.findById(idMercancia)
                 .orElseThrow(() -> new NotFoundException("Mercancía no encontrada"));
@@ -73,6 +77,7 @@ public class MercanciaUseCase {
         return mapper.toResponseDTO(actualizada);
     }
 
+    @Transactional
     public boolean eliminarMercancia(Long idMercancia, Long idUsuario) {
         Mercancia mercancia = mercanciaRepository.findById(idMercancia)
                 .orElseThrow(() -> new NotFoundException("Mercancía no encontrada"));

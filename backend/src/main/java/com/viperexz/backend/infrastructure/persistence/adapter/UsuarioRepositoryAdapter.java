@@ -1,5 +1,6 @@
 package com.viperexz.backend.infrastructure.persistence.adapter;
 
+import com.viperexz.backend.domain.model.Mercancia;
 import com.viperexz.backend.domain.model.Usuario;
 import com.viperexz.backend.domain.repository.UsuarioRepository;
 import com.viperexz.backend.infrastructure.persistence.entity.MercanciaEntity;
@@ -9,14 +10,17 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 public class UsuarioRepositoryAdapter implements UsuarioRepository {
 
     private final UsuarioJpaRepository jpaRepository;
+    private final MercanciaRepositoryAdapter mercanciaRepositoryAdapter;
 
-    public UsuarioRepositoryAdapter(UsuarioJpaRepository jpaRepository) {
+    public UsuarioRepositoryAdapter(UsuarioJpaRepository jpaRepository, MercanciaRepositoryAdapter mercanciaRepositoryAdapter) {
         this.jpaRepository = jpaRepository;
+        this.mercanciaRepositoryAdapter = mercanciaRepositoryAdapter;
     }
 
     @Override
@@ -58,6 +62,17 @@ public class UsuarioRepositoryAdapter implements UsuarioRepository {
         //#TODO Registrar el cargo del usuario "Pueden aparecer mas cargos en el futuro"
         /*usuario.setCargoUsuario(entity.getCargo());*/
         usuario.setFechaIngresoUsuario(entity.getFechaIngresoUsuario());
+        if (entity.getMercancias() != null) {
+            List<Mercancia> mercancias = entity.getMercancias().stream()
+                    .map(mercanciaEntity -> {
+                        Mercancia mercancia = mercanciaRepositoryAdapter.toDomain(mercanciaEntity);
+                        mercancia.setUsuarioRegistro(usuario);
+                        return mercancia;
+                    })
+                    .collect(Collectors.toList());
+            usuario.setMercanciasUsuario(mercancias);
+        }
+
         return usuario;
     }
 

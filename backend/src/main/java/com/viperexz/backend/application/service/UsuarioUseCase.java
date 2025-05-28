@@ -7,6 +7,7 @@ import com.viperexz.backend.domain.repository.UsuarioRepository;
 import com.viperexz.backend.exception.BusinessException;
 import com.viperexz.backend.exception.NotFoundException;
 import com.viperexz.backend.interfaces.rest.mapper.UsuarioMapper;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -22,12 +23,14 @@ public class UsuarioUseCase {
         this.usuarioMapper = usuarioMapper;
     }
 
+    @Transactional
     public UsuarioResponseDTO consultarPorId(Long idUsuario) {
         Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
         return usuarioMapper.toResponseDTO(usuario);
     }
 
+    @Transactional
     public List<UsuarioResponseDTO> consultarTodos() {
         List<Usuario> usuarios = usuarioRepository.findAll();
         return usuarios.stream()
@@ -35,6 +38,7 @@ public class UsuarioUseCase {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
    public UsuarioResponseDTO registrarUsuario(UsuarioRequestDTO dto) {
        Usuario usuario = usuarioMapper.toDomain(dto);
 
@@ -51,6 +55,7 @@ public class UsuarioUseCase {
        return usuarioMapper.toResponseDTO(guardado);
    }
 
+    @Transactional
    public UsuarioResponseDTO actualizarUsuario(UsuarioResponseDTO dto, Long idUsuario) {
        Usuario usuario = usuarioRepository.findById(idUsuario)
                .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
@@ -65,6 +70,7 @@ public class UsuarioUseCase {
        return usuarioMapper.toResponseDTO(actualizado);
    }
 
+    @Transactional
    public boolean eliminarUsuario(Long idUsuario) {
        Usuario usuario = usuarioRepository.findById(idUsuario)
                .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));

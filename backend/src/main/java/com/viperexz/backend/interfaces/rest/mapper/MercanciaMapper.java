@@ -20,6 +20,7 @@ public class MercanciaMapper {
 
     public MercanciaResponseDTO toResponseDTO(Mercancia mercancia) {
         MercanciaResponseDTO dto = new MercanciaResponseDTO();
+        dto.setIdMercancia(mercancia.getIdMercancia());
         dto.setNombreMercancia(mercancia.getNombreMercancia());
         dto.setCantidadMercancia(mercancia.getCantidadMercancia());
         dto.setFechaIngresoMercancia(mercancia.getFechaIngresoMercancia());

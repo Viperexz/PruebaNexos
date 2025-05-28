@@ -45,7 +45,7 @@ public class MercanciaController {
         return ResponseEntity.ok(responseDTO);
     }
 
- @DeleteMapping("/mercancia/{idMercancia}/usuario/{idUsuario}")
+ @DeleteMapping("/{idMercancia}/usuario/{idUsuario}")
  public ResponseEntity<Void> eliminarMercancia(@PathVariable("idMercancia") Long idMercancia, @PathVariable("idUsuario") Long idUsuario) {
      mercanciaUseCase.eliminarMercancia(idMercancia, idUsuario);
      return ResponseEntity.noContent().build();

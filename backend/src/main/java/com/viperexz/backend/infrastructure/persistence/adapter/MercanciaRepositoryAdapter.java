@@ -37,11 +37,6 @@ public class MercanciaRepositoryAdapter implements MercanciaRepository {
     }
 
     @Override
-    public Optional<Mercancia> findByNombre(String nombre) {
-        return Optional.empty();
-    }
-
-    @Override
     public Mercancia save(Mercancia mercancia) {
         MercanciaEntity entity = toEntity(mercancia);
         MercanciaEntity saved = jpaRepository.save(entity);
@@ -58,8 +53,10 @@ public class MercanciaRepositoryAdapter implements MercanciaRepository {
         MercanciaEntity entity = toEntity(mercancia);
         jpaRepository.delete(entity);
     }
-    private Mercancia toDomain(MercanciaEntity entity) {
+
+    public Mercancia toDomain(MercanciaEntity entity) {
         Mercancia mercancia = new Mercancia();
+        mercancia.setIdMercancia(entity.getIdMercancia());
         mercancia.setNombreMercancia(entity.getNombreMercancia());
         mercancia.setCantidadMercancia(entity.getCantidadMercancia());
         mercancia.setFechaIngresoMercancia(entity.getFechaIngresoMercancia());
@@ -68,17 +65,13 @@ public class MercanciaRepositoryAdapter implements MercanciaRepository {
             Usuario usuario = new Usuario();
             usuario.setIdUsuario(usuarioEntity.getIdUsuario());
             usuario.setNombreUsuario(usuarioEntity.getNombreUsuario());
-            usuario.setEdadUsuario(usuarioEntity.getEdadUsuario());
-            //#TODO Registrar el cargo del usuario "Pueden aparecer mas cargos en el futuro"
-            /*usuario.setCargoUsuario(usuarioEntity());*/
-            usuario.setFechaIngresoUsuario(usuarioEntity.getFechaIngresoUsuario());
             mercancia.setUsuarioRegistro(usuario);
         }
         mercancia.setIdMercancia(entity.getIdMercancia());
         return mercancia;
     }
 
-    private MercanciaEntity toEntity(Mercancia mercancia) {
+    public MercanciaEntity toEntity(Mercancia mercancia) {
         MercanciaEntity entity = new MercanciaEntity();
         entity.setNombreMercancia(mercancia.getNombreMercancia());
         entity.setCantidadMercancia(mercancia.getCantidadMercancia());
