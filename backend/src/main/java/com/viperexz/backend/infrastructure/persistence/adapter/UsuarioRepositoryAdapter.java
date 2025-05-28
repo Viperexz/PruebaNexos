@@ -2,6 +2,7 @@ package com.viperexz.backend.infrastructure.persistence.adapter;
 
 import com.viperexz.backend.domain.model.Usuario;
 import com.viperexz.backend.domain.repository.UsuarioRepository;
+import com.viperexz.backend.infrastructure.persistence.entity.MercanciaEntity;
 import com.viperexz.backend.infrastructure.persistence.entity.UsuarioEntity;
 import com.viperexz.backend.infrastructure.persistence.repository.UsuarioJpaRepository;
 import org.springframework.stereotype.Component;
@@ -36,6 +37,17 @@ public class UsuarioRepositoryAdapter implements UsuarioRepository {
         return jpaRepository.findAll().stream()
                 .map(this::toDomain)
                 .toList();
+    }
+
+    @Override
+    public boolean existsByNombreUsuario(String nombreUsuario) {
+        return jpaRepository.existsByNombreUsuario(nombreUsuario);
+    }
+
+    @Override
+    public void deleteByUsuario(Usuario usuario) {
+        UsuarioEntity entity = toEntity(usuario);
+        jpaRepository.delete(entity);
     }
 
     private Usuario toDomain(UsuarioEntity entity) {

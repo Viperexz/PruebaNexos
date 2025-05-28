@@ -12,4 +12,6 @@ public interface UsuarioRepository {
     Optional<Usuario> findById(Long id);
     Usuario save(Usuario usuario);
     List<Usuario> findAll();
+    boolean existsByNombreUsuario(String nombreUsuario);
+    void deleteByUsuario(Usuario usuario);
 }

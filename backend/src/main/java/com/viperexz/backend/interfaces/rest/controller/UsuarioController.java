@@ -1,6 +1,8 @@
 package com.viperexz.backend.interfaces.rest.controller;
 
-import com.viperexz.backend.application.dto.UsuarioDTO;
+
+import com.viperexz.backend.application.dto.UsuarioRequestDTO;
+import com.viperexz.backend.application.dto.UsuarioResponseDTO;
 import com.viperexz.backend.application.service.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,23 +14,40 @@ import java.util.List;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UsuarioController {
 
-    private final ConsultarUsuarioUseCase consultarUsuarioUseCase;
-    private final ConsultarTodosLosUsuariosUseCase consultarTodosLosUsuariosUseCase;
+    private final UsuarioUseCase usuarioUseCase;
 
-    public UsuarioController(ConsultarUsuarioUseCase consultarUsuarioUseCase, ConsultarTodosLosUsuariosUseCase consultarTodosLosUsuariosUseCase) {
-        this.consultarUsuarioUseCase = consultarUsuarioUseCase;
-        this.consultarTodosLosUsuariosUseCase = consultarTodosLosUsuariosUseCase;
+    public UsuarioController(UsuarioUseCase usuarioUseCase) {
+        this.usuarioUseCase = usuarioUseCase;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> obtenerUsuario(@PathVariable Long id) {
-        UsuarioDTO responseDTO = consultarUsuarioUseCase.consultarPorId(id);
+    public ResponseEntity<UsuarioResponseDTO> obtenerUsuario(@PathVariable Long id) {
+        UsuarioResponseDTO responseDTO = usuarioUseCase.consultarPorId(id);
         return ResponseEntity.ok(responseDTO);
     }
 
     @GetMapping
-    public ResponseEntity<List<UsuarioDTO>> obtenerTodosLosUsuarios() {
-        List<UsuarioDTO> usuarios = consultarTodosLosUsuariosUseCase.consultarTodos();
+    public ResponseEntity<List<UsuarioResponseDTO>> obtenerTodosLosUsuarios() {
+        List<UsuarioResponseDTO> usuarios = usuarioUseCase.consultarTodos();
         return ResponseEntity.ok(usuarios);
+    }
+
+    @PostMapping
+    public ResponseEntity<UsuarioResponseDTO> registrarUsuario(@RequestBody UsuarioRequestDTO requestDTO) {
+        UsuarioResponseDTO responseDTO = usuarioUseCase.registrarUsuario(requestDTO);
+        return ResponseEntity.ok(responseDTO);
+    }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UsuarioResponseDTO> actualizarUsuario(@PathVariable("id") Long id, @RequestBody UsuarioResponseDTO requestDTO) {
+        UsuarioResponseDTO responseDTO = usuarioUseCase.actualizarUsuario(requestDTO,id);
+        return ResponseEntity.ok(responseDTO);
+    }
+
+    @DeleteMapping("/{idUsuario}")
+    public ResponseEntity<Void> eliminarUsuario(@PathVariable("idUsuario") Long idUsuario) {
+        usuarioUseCase.eliminarUsuario(idUsuario);
+        return ResponseEntity.noContent().build();
     }
 }

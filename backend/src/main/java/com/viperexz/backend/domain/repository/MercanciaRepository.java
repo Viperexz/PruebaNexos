@@ -11,7 +11,6 @@ import java.util.Optional;
 public interface MercanciaRepository {
     Optional<Mercancia> findById(Long id);
     List<Mercancia> findAll();
-    Optional<Mercancia> findByNombre(String nombre);
     Mercancia save(Mercancia mercancia);
     boolean existsByNombre(String nombre);
     void delete(Mercancia mercancia);
