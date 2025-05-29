@@ -53,8 +53,18 @@ public class UsuarioRepositoryAdapter implements UsuarioRepository {
 
     @Override
     public void deleteByUsuario(Usuario usuario) {
-        UsuarioEntity entity = toEntity(usuario);
-        jpaRepository.delete(entity);
+        jpaRepository.deleteById(usuario.getIdUsuario());
+    }
+
+    @Override
+    public boolean existsByCargoId(Long idCargo) {
+        return jpaRepository.existsByCargoUsuarioIdCargo(idCargo);
+    }
+
+    @Override
+    public Optional<Usuario> findByNombreUsuario(String prmUsuario) {
+        return jpaRepository.findByNombreUsuario(prmUsuario)
+                .map(this::toDomain);
     }
 
     private Usuario toDomain(UsuarioEntity entity) {
@@ -64,6 +74,17 @@ public class UsuarioRepositoryAdapter implements UsuarioRepository {
         usuario.setEdadUsuario(entity.getEdadUsuario());
         usuario.setCargoUsuario(cargoRepositoryAdapter.toDomain(entity.getCargoUsuario()));
         usuario.setFechaIngresoUsuario(entity.getFechaIngresoUsuario());
+        /*Referencia Circular
+        *Se maneja la condicion para evitar eliminar Usuario con mercancias registradas
+        *La linea genera una referencia circular al intentar convertir las mercancias
+        * lo que finaliza en un StackOverflowError en la conversión de entidades a dominio.
+       */
+        /*if (entity.getMercancias() != null) {
+            usuario.setMercanciasUsuario(entity.getMercancias().stream()
+                .map(mercanciaRepositoryAdapter::toDomain)
+                .collect(Collectors.toList()));
+
+        }*/
         return usuario;
     }
 
@@ -74,6 +95,10 @@ public class UsuarioRepositoryAdapter implements UsuarioRepository {
         entity.setEdadUsuario(usuario.getEdadUsuario());
         entity.setCargoUsuario(cargoRepositoryAdapter.toEntity(usuario.getCargoUsuario()));
         entity.setFechaIngresoUsuario(usuario.getFechaIngresoUsuario());
+        entity.setMercancias(usuario.getMercanciasUsuario() != null ?
+            usuario.getMercanciasUsuario().stream()
+                .map(mercanciaRepositoryAdapter::toEntity)
+                .collect(Collectors.toList()) : null);
         return entity;
     }
 }

@@ -10,4 +10,8 @@ import java.util.Optional;
 @Repository
 public interface UsuarioJpaRepository extends JpaRepository<UsuarioEntity, Long> {
     boolean existsByNombreUsuario(String nombreUsuario);
+
+    boolean existsByCargoUsuarioIdCargo(Long idCargo);
+
+    Optional<UsuarioEntity> findByNombreUsuario(String nombreUsuario);
 }

@@ -22,8 +22,7 @@ public class UsuarioEntity {
     private CargoEntity cargoUsuario;
     private LocalDate fechaIngresoUsuario;
 
-    @OneToMany(mappedBy = "usuarioRegistro", cascade = CascadeType.ALL, fetch = FetchType.LAZY,
-            orphanRemoval = true)
+    @OneToMany(mappedBy = "usuarioRegistro", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<MercanciaEntity> mercancias;
 
 }

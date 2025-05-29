@@ -58,6 +58,11 @@ public class MercanciaRepositoryAdapter implements MercanciaRepository {
         jpaRepository.deleteById(mercancia.getIdMercancia());
     }
 
+    @Override
+    public boolean existsByUsuarioId(Long idUsuario) {
+        return jpaRepository.existsByUsuarioRegistroIdUsuario(idUsuario);
+
+    }
 
 
     public Mercancia toDomain(MercanciaEntity entity) {

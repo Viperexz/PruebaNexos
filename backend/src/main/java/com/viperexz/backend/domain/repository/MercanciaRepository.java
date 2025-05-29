@@ -14,4 +14,5 @@ public interface MercanciaRepository {
     Mercancia save(Mercancia mercancia);
     boolean existsByNombre(String nombre);
     void delete(Mercancia mercancia);
+    boolean existsByUsuarioId(Long idUsuario);
 }

@@ -8,6 +8,7 @@ import com.viperexz.backend.domain.repository.CargoRepository;
 import com.viperexz.backend.domain.repository.MercanciaRepository;
 import com.viperexz.backend.domain.repository.UsuarioRepository;
 import com.viperexz.backend.domain.service.MercanciaService;
+import com.viperexz.backend.exception.BusinessException;
 import com.viperexz.backend.exception.NotFoundException;
 import com.viperexz.backend.interfaces.rest.mapper.CargoMapper;
 import com.viperexz.backend.interfaces.rest.mapper.MercanciaMapper;
@@ -20,10 +21,12 @@ import java.util.stream.Collectors;
 @Component
 public class CargoUseCase {
     private final CargoRepository cargoRepository;
+    private final UsuarioRepository usuarioRepository;
     private final CargoMapper mapper;
 
-    public CargoUseCase(CargoRepository cargoRepository, CargoMapper mapper) {
+    public CargoUseCase(CargoRepository cargoRepository,UsuarioRepository usuarioRepository, CargoMapper mapper) {
         this.cargoRepository = cargoRepository;
+        this.usuarioRepository = usuarioRepository;
         this.mapper = mapper;
     }
 
@@ -57,9 +60,19 @@ public class CargoUseCase {
     public void eliminarCargo(Long idCargo) {
         Cargo cargo = cargoRepository.findById(idCargo)
                 .orElseThrow(() -> new IllegalArgumentException("Cargo no encontrado"));
+
+        boolean hasAssociatedUsers = usuarioRepository.existsByCargoId(idCargo);
+        if (hasAssociatedUsers) {
+            throw new BusinessException("No se puede eliminar el cargo porque tiene usuarios asociados.");
+        }
+
         cargoRepository.delete(cargo);
     }
 
 
-
+    public CargoDTO consultarPorNombre(String operador) {
+        Cargo cargo = cargoRepository.findByNombreCargo(operador)
+                .orElseThrow(() -> new NotFoundException("Cargo no encontrado"));
+        return mapper.toResponseDTO(cargo);
+    }
 }

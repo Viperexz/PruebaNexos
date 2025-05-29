@@ -12,8 +12,9 @@
           {{ usuario.nombreUsuario }}
         </option>
       </select>
-      <button (click)="seleccionarUsuario()">Continuar</button>
-
+      <div class="button-container">
+        <button (click)="seleccionarUsuario()">Continuar</button>
+      </div>
       <!-- Notificación -->
       <app-notification
         *ngIf="showNotification"

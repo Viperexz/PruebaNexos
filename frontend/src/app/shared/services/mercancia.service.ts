@@ -30,13 +30,36 @@ export class MercanciaService {
     );
   }
 
-  update(mercancia: MercanciaResponseModel,idMercancia: number|undefined,idUsuario: number|undefined): Observable<MercanciaResponseModel> {
-    console.log(`Updating mercancia with ID: ${idMercancia} for user ID: ${idUsuario}` + mercancia.idMercancia + mercancia.nombreMercancia + mercancia.cantidadMercancia + mercancia.fechaIngresoMercancia + mercancia.nombreUsuarioRegistro);
-    return this.http.put<MercanciaResponseModel>(`${this.apiUrl}/${idMercancia}/usuario/${idUsuario}`, mercancia);
+  update(mercancia: MercanciaRequestModel,idMercancia: number|undefined,idUsuario: number|undefined): Observable<MercanciaRequestModel> {
+    return this.http.put<MercanciaRequestModel>(`${this.apiUrl}/${idMercancia}/usuario/${idUsuario}`, mercancia);
   }
 
   delete(idMercancia: number| undefined , idUsuario: number| undefined): Observable<void> {
     console.log(`Deleting mercancia with ID: ${idMercancia} for user ID: ${idUsuario}`);
     return this.http.delete<void>(`${this.apiUrl}/${idMercancia}/usuario/${idUsuario}`);
   }
+
+  getByFiltros(
+    nombre?: string,
+    fechaRegistroDesde?: string,
+    fechaRegistroHasta?: string,
+    idUsuarioRegistro?: number,
+    fechaModificacionDesde?: string,
+    fechaModificacionHasta?: string,
+    idUsuarioModificacion?: number
+  ): Observable<MercanciaResponseModel[]> {
+    const params: any = {};
+
+    if (nombre) params.nombre = nombre;
+    if (fechaRegistroDesde) params.fechaRegistroDesde = fechaRegistroDesde;
+    if (fechaRegistroHasta) params.fechaRegistroHasta = fechaRegistroHasta;
+    if (idUsuarioRegistro) params.idUsuarioRegistro = idUsuarioRegistro;
+    if (fechaModificacionDesde) params.fechaModificacionDesde = fechaModificacionDesde;
+    if (fechaModificacionHasta) params.fechaModificacionHasta = fechaModificacionHasta;
+    if (idUsuarioModificacion) params.idUsuarioModificacion = idUsuarioModificacion;
+
+    return this.http.get<MercanciaResponseModel[]>(`${this.apiUrl}/filtro`, { params });
+  }
+
+
 }

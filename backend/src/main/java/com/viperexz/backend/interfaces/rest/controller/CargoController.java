@@ -19,34 +19,33 @@ public class CargoController {
     }
 
     @PostMapping
-    public ResponseEntity<CargoDTO> registrarCargo(@RequestBody CargoDTO cargoDTO) {
+    public ResponseEntity<?> registrarCargo(@RequestBody CargoDTO cargoDTO) {
         try{
             CargoDTO responseDTO = cargoUseCase.registrarCargo(cargoDTO);
             return ResponseEntity.ok(responseDTO);
         }catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-
     }
 
     @GetMapping
-    public ResponseEntity<List<CargoDTO>> obtenerTodosLosCargos() {
+    public ResponseEntity<?> obtenerTodosLosCargos() {
         try{
             return ResponseEntity.ok(cargoUseCase.consultarTodosLosCargos());
         }
         catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
 
     }
 
     @DeleteMapping("/{idCargo}")
-    public ResponseEntity<Void> eliminarCargo(@PathVariable("idCargo") Long idCargo) {
+    public ResponseEntity<?> eliminarCargo(@PathVariable("idCargo") Long idCargo) {
         try{
             cargoUseCase.eliminarCargo(idCargo);
             return ResponseEntity.noContent().build();
         }catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
 
     }

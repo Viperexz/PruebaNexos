@@ -1,6 +1,6 @@
 export interface MercanciaRequestModel{
   nombreMercancia: string;
-  cantidadMercancia: string;
+  cantidadMercancia: number;
   fechaIngresoMercancia: string;
   idUsuario: number|undefined;
 }

@@ -52,13 +52,12 @@ public class MercanciaUseCase {
     @Transactional
     public MercanciaResponseDTO registrarMercancia(MercanciaRequestDTO dto) {
         Usuario usuario = usuarioRepository.findById(dto.getIdUsuario())
-                .orElseThrow(() -> new NotFoundException("Mercancia no encontrado"));
+                .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
 
         Mercancia mercancia = mapper.toDomain(dto, usuario);
 
         mercanciaService.validarRegistro(mercancia);
 
-        // validación de unicidad en repositorio
         if (mercanciaRepository.existsByNombre(mercancia.getNombreMercancia())) {
             throw new BusinessException("Ya existe una mercancía con ese nombre.");
         }
@@ -102,5 +101,82 @@ public class MercanciaUseCase {
         mercanciaService.validarEliminacion(mercancia.getUsuarioRegistro().getIdUsuario(), usuario.getIdUsuario());
         mercanciaRepository.delete(mercancia);
     }
+
+    public List<MercanciaResponseDTO> filtrarMercancia(
+            String nombre,
+            LocalDate fechaRegistroDesde,
+            LocalDate fechaRegistroHasta,
+            Long idUsuarioRegistro,
+            LocalDate fechaModificacionDesde,
+            LocalDate fechaModificacionHasta,
+            Long idUsuarioModificacion
+    ) {
+        if (nombre == null && fechaRegistroDesde == null && fechaRegistroHasta == null &&
+                idUsuarioRegistro == null && fechaModificacionDesde == null &&
+                fechaModificacionHasta == null && idUsuarioModificacion == null) {
+            throw new BusinessException("Debe proporcionar al menos un filtro.");
+        }
+
+        List<Mercancia> mercancias = mercanciaRepository.findAll();
+
+        if (nombre != null && !nombre.isBlank()) {
+            mercancias = mercancias.stream()
+                    .filter(m -> m.getNombreMercancia().equalsIgnoreCase(nombre))
+                    .collect(Collectors.toList());
+        }
+
+        if (fechaRegistroDesde != null) {
+            mercancias = mercancias.stream()
+                    .filter(m -> m.getFechaIngresoMercancia() != null &&
+                            !m.getFechaIngresoMercancia().isBefore(fechaRegistroDesde))
+                    .collect(Collectors.toList());
+        }
+
+        if (fechaRegistroHasta != null) {
+            mercancias = mercancias.stream()
+                    .filter(m -> m.getFechaIngresoMercancia() != null &&
+                            !m.getFechaIngresoMercancia().isAfter(fechaRegistroHasta))
+                    .collect(Collectors.toList());
+        }
+
+        if (idUsuarioRegistro != null) {
+            mercancias = mercancias.stream()
+                    .filter(m -> m.getUsuarioRegistro() != null &&
+                            m.getUsuarioRegistro().getIdUsuario().equals(idUsuarioRegistro))
+                    .collect(Collectors.toList());
+        }
+
+        if (fechaModificacionDesde != null) {
+            mercancias = mercancias.stream()
+                    .filter(m -> m.getFechaModificacion() != null &&
+                            !m.getFechaModificacion().isBefore(fechaModificacionDesde))
+                    .collect(Collectors.toList());
+        }
+
+        if (fechaModificacionHasta != null) {
+            mercancias = mercancias.stream()
+                    .filter(m -> m.getFechaModificacion() != null &&
+                            !m.getFechaModificacion().isAfter(fechaModificacionHasta))
+                    .collect(Collectors.toList());
+        }
+
+        if (idUsuarioModificacion != null) {
+            mercancias = mercancias.stream()
+                    .filter(m -> m.getUsuarioModificacion() != null &&
+                            m.getUsuarioModificacion().getIdUsuario().equals(idUsuarioModificacion))
+                    .collect(Collectors.toList());
+        }
+
+        if (mercancias.isEmpty()) {
+            throw new NotFoundException("No se encontraron mercancías con los criterios especificados.");
+        }
+
+        return mercancias.stream()
+                .map(mapper::toResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+
+
 
 }

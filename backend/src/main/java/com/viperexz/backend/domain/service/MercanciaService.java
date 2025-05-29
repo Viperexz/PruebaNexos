@@ -22,6 +22,10 @@ public class MercanciaService {
         if (mercancia.getNombreMercancia() == null || mercancia.getNombreMercancia().isBlank()) {
             throw new BusinessException("El nombre es obligatorio.");
         }
+        if(mercancia.getCantidadMercancia()>1000000)
+        {
+            throw new BusinessException("La cantidad de mercancía no puede ser mayor que 1.000.000");
+        }
     }
 
     public void validarEliminacion(Long idUsuarioMercancia, Long idUsuarioSolicitante) {

@@ -14,4 +14,7 @@ public interface UsuarioRepository {
     List<Usuario> findAll();
     boolean existsByNombreUsuario(String nombreUsuario);
     void deleteByUsuario(Usuario usuario);
+    boolean existsByCargoId(Long idCargo);
+
+    Optional<Usuario> findByNombreUsuario(String prmUsuario);
 }

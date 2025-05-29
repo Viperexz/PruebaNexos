@@ -28,6 +28,7 @@
         type="date"
         [(ngModel)]="mercancia.fechaIngresoMercancia"
         name="fechaIngresoMercancia"
+        [disabled]="modo === 'editar'"
         required
       />
     </div>
@@ -37,3 +38,12 @@
     </div>
   </div>
 </form>
+
+<app-notification
+  *ngIf="showNotification"
+  [type]="notificationType"
+  [title]="'Error'"
+  [message]="notificationMessage"
+  (onClose)="closeNotification()">
+</app-notification>
+

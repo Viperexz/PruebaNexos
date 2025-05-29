@@ -2,7 +2,7 @@
 <div class="header">
   <h2>Listado de Usuarios</h2>
   <div class="actions">
-    <Button (click)="createUsuario()" class="btn btn-primary">Crear Cargo</Button>
+    <Button (click)="createUsuario()" class="btn btn-primary">Crear Usuario</Button>
   </div>
 </div><div class="body">
 <table>
@@ -25,9 +25,6 @@
       <a (click)="editUsuario(m.idUsuario)" title="Editar" class="edit-link">
         <i class="fas fa-edit"></i>
       </a>
-      <a (click)="detailsUsuario(m.idUsuario)" title="Detalles">
-        <i class="fas fa-info-circle"></i>
-      </a>
       <a (click)="deleteUsuario(m.idUsuario)" title="Eliminar" style="cursor: pointer;">
         <i class="fas fa-trash"></i>
       </a>
@@ -41,7 +38,7 @@
 <app-notification
   *ngIf="showNotification"
   [type]="notificationType"
-  [title]="'Error'"
+  [title]="notificationTitle"
   [message]="notificationMessage"
   (onClose)="closeNotification()">
 </app-notification>

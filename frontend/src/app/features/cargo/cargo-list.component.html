@@ -17,12 +17,6 @@
     <td>{{ m.nombreCargo }}</td>
 
     <td>
-      <a (click)="editCargo(m.idCargo)" title="Editar" class="edit-link">
-        <i class="fas fa-edit"></i>
-      </a>
-      <a (click)="detailsCargo(m.idCargo)" title="Detalles">
-        <i class="fas fa-info-circle"></i>
-      </a>
       <a (click)="deleteCargo(m.idCargo)" title="Eliminar" style="cursor: pointer;">
         <i class="fas fa-trash"></i>
       </a>
@@ -31,4 +25,24 @@
   </tbody>
 </table>
 </div>
+</div>
+
+<app-notification
+  *ngIf="showNotification"
+  [type]="notificationType"
+  [title]="notificationTitle"
+  [message]="notificationMessage"
+  (onClose)="closeNotification()">
+</app-notification>
+
+<!-- Modal -->
+<div class="modal" [class.show]="modalFormVisible" (click)="cerrarModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <app-cargo-form
+      [modo]="modoForm"
+      [cargo]="cargoActual"
+      (onGuardar)="guardarCargo($event)"
+      (onCancelar)="cerrarModal()">
+    </app-cargo-form>
+  </div>
 </div>

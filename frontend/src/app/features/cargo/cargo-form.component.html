@@ -1,6 +1,6 @@
-<form *ngIf="mercancia" #form="ngForm" (ngSubmit)="guardar()">
+<form *ngIf="cargo" #form="ngForm" (ngSubmit)="guardar()">
   <div class="form-header">
-    <h4>{{ modo === 'crear' ? 'Crear Mercancía' : 'Editar Mercancía' }}</h4>
+    <h4>{{ modo === 'crear' ? 'Crear Cargo' : 'Editar Mercancía' }}</h4>
   </div>
   <div class="form-body">
     <div class="form-group">
@@ -8,26 +8,8 @@
       <input
         type="text"
         id="nombreMercancia"
-        [(ngModel)]="mercancia.nombreMercancia"
+        [(ngModel)]="cargo.nombreCargo"
         name="nombreMercancia"
-        required
-      />
-    </div>
-    <div class="form-group">
-      <label>Cantidad:</label>
-      <input
-        type="number"
-        [(ngModel)]="mercancia.cantidadMercancia"
-        name="cantidadMercancia"
-        required
-      />
-    </div>
-    <div class="form-group">
-      <label>Fecha de ingreso:</label>
-      <input
-        type="date"
-        [(ngModel)]="mercancia.fechaIngresoMercancia"
-        name="fechaIngresoMercancia"
         required
       />
     </div>
@@ -37,3 +19,10 @@
     </div>
   </div>
 </form>
+<app-notification
+  *ngIf="showNotification"
+  [type]="notificationType"
+  [title]="'Error'"
+  [message]="notificationMessage"
+  (onClose)="closeNotification()">
+</app-notification>

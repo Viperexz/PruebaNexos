@@ -39,4 +39,9 @@
   justify-content: center;
 }
 
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px; /* Espaciado opcional */
+}
 

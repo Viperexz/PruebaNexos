@@ -12,4 +12,5 @@ import java.util.Optional;
 @Repository
 public interface MercanciaJpaRepository extends JpaRepository<MercanciaEntity, Long> {
     boolean existsByNombreMercancia(String nombreMercancia);
+    boolean existsByUsuarioRegistroIdUsuario(Long idUsuario);
 }
