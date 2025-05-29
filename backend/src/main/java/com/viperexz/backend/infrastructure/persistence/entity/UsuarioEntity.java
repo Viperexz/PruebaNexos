@@ -13,12 +13,17 @@ import java.util.List;
 public class UsuarioEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_usuario")
     private Long idUsuario;
     private String nombreUsuario;
     private int edadUsuario;
+    @ManyToOne
+    @JoinColumn(name = "cargo_usuario_id_cargo")
+    private CargoEntity cargoUsuario;
     private LocalDate fechaIngresoUsuario;
 
     @OneToMany(mappedBy = "usuarioRegistro", cascade = CascadeType.ALL, fetch = FetchType.LAZY,
             orphanRemoval = true)
     private List<MercanciaEntity> mercancias;
+
 }

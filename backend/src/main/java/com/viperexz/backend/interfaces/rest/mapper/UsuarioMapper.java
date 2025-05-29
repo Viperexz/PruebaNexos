@@ -3,7 +3,10 @@ package com.viperexz.backend.interfaces.rest.mapper;
 import com.viperexz.backend.application.dto.MercanciaResponseDTO;
 import com.viperexz.backend.application.dto.UsuarioRequestDTO;
 import com.viperexz.backend.application.dto.UsuarioResponseDTO;
+import com.viperexz.backend.application.service.CargoUseCase;
+import com.viperexz.backend.domain.model.Cargo;
 import com.viperexz.backend.domain.model.Usuario;
+import com.viperexz.backend.domain.repository.CargoRepository;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Component;
 
@@ -14,12 +17,20 @@ import java.util.stream.Collectors;
 public class UsuarioMapper {
 
 
+    private final CargoRepository cargoRepository;
+    private final CargoUseCase cargoUseCase;
+
+    public UsuarioMapper(CargoRepository cargoRepository, CargoUseCase cargoUseCase) {
+        this.cargoRepository = cargoRepository;
+        this.cargoUseCase = cargoUseCase;
+    }
+
     public UsuarioResponseDTO toResponseDTO(Usuario usuario) {
         UsuarioResponseDTO dto = new UsuarioResponseDTO();
         dto.setIdUsuario(usuario.getIdUsuario());
         dto.setNombreUsuario(usuario.getNombreUsuario());
         dto.setEdadUsuario(usuario.getEdadUsuario());
-        dto.setCargoUsuario(usuario.getCargoUsuario());
+        dto.setCargoUsuario(usuario.getCargoUsuario().getNombreCargo());
         dto.setFechaIngresoUsuario(usuario.getFechaIngresoUsuario());
 
         if(usuario.getMercanciasUsuario() == null || usuario.getMercanciasUsuario().isEmpty()) {
@@ -34,7 +45,7 @@ public class UsuarioMapper {
                     mDto.setNombreMercancia(mercancia.getNombreMercancia());
                     mDto.setCantidadMercancia(mercancia.getCantidadMercancia());
                     mDto.setFechaIngresoMercancia(mercancia.getFechaIngresoMercancia());
-                    mDto.setNombreUsuario(usuario.getNombreUsuario());
+                    mDto.setNombreUsuarioRegistro(usuario.getNombreUsuario());
                     return mDto;
                 })
                 .collect(Collectors.toList());
@@ -46,7 +57,9 @@ public class UsuarioMapper {
         Usuario usuario = new Usuario();
         usuario.setNombreUsuario(dto.getNombreUsuario());
         usuario.setEdadUsuario(dto.getEdadUsuario());
-        usuario.setCargoUsuario(dto.getCargoUsuario());
+        Cargo cargo = cargoRepository.findById(dto.getIdCargoUsuario())
+                .orElseThrow(() -> new IllegalArgumentException("Cargo no encontrado"));
+        usuario.setCargoUsuario(cargo);
         usuario.setFechaIngresoUsuario(dto.getFechaIngresoUsuario());
         return usuario;
     }

@@ -1,0 +1,10 @@
+<div class="notification" [ngClass]="type">
+  <div class="icon"></div>
+  <div class="content">
+    <strong>{{ title }}</strong>
+    <p>{{ message }}</p>
+  </div>
+  <button class="close" (click)="closeNotification()" aria-label="Close">
+    &times;
+  </button>
+</div>

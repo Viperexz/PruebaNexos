@@ -1,5 +1,6 @@
 package com.viperexz.backend.application.dto;
 
+import com.viperexz.backend.domain.model.Cargo;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -9,6 +10,6 @@ import java.util.List;
 public class UsuarioRequestDTO {
     private String nombreUsuario;
     private int edadUsuario;
-    private String cargoUsuario;
+    private Long idCargoUsuario;
     private LocalDate fechaIngresoUsuario;
 }

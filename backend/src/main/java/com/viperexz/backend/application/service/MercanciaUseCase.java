@@ -13,6 +13,7 @@ import com.viperexz.backend.interfaces.rest.mapper.MercanciaMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,10 +38,9 @@ public class MercanciaUseCase {
     @Transactional
     public MercanciaResponseDTO consultarPorId(Long idUsuario) {
         Mercancia mercancia = mercanciaRepository.findById(idUsuario)
-                .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
+                .orElseThrow(() -> new NotFoundException("Mercancia no encontrado"));
         return mapper.toResponseDTO(mercancia);
     }
-
     @Transactional
     public List<MercanciaResponseDTO> consultarTodos() {
         List<Mercancia> mercancia = mercanciaRepository.findAll();
@@ -52,7 +52,7 @@ public class MercanciaUseCase {
     @Transactional
     public MercanciaResponseDTO registrarMercancia(MercanciaRequestDTO dto) {
         Usuario usuario = usuarioRepository.findById(dto.getIdUsuario())
-                .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
+                .orElseThrow(() -> new NotFoundException("Mercancia no encontrado"));
 
         Mercancia mercancia = mapper.toDomain(dto, usuario);
 
@@ -66,28 +66,41 @@ public class MercanciaUseCase {
         Mercancia guardada = mercanciaRepository.save(mercancia);
         return mapper.toResponseDTO(guardada);
     }
-    @Transactional
-    public MercanciaResponseDTO actualizarMercancia(MercanciaRequestDTO dto, Long idMercancia) {
-        Mercancia mercancia = mercanciaRepository.findById(idMercancia)
-                .orElseThrow(() -> new NotFoundException("Mercancía no encontrada"));
-;
-        mercanciaService.validarActualizarDatos(mercancia, dto.getNombreMercancia(), dto.getCantidadMercancia(), dto.getFechaIngresoMercancia());
-
-        Mercancia actualizada = mercanciaRepository.save(mercancia);
-        return mapper.toResponseDTO(actualizada);
-    }
 
     @Transactional
-    public boolean eliminarMercancia(Long idMercancia, Long idUsuario) {
+    public MercanciaResponseDTO actualizarMercancia(MercanciaRequestDTO dto, Long idMercancia, Long idUsuario) {
         Mercancia mercancia = mercanciaRepository.findById(idMercancia)
                 .orElseThrow(() -> new NotFoundException("Mercancía no encontrada"));
 
         Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
+
+        // Verificar si el nombre ya existe en otra mercancía
+        if (!mercancia.getNombreMercancia().equals(dto.getNombreMercancia()) &&
+                mercanciaRepository.existsByNombre(dto.getNombreMercancia())) {
+            throw new BusinessException("Ya existe una mercancía con ese nombre.");
+        }
+
+        mercanciaService.validarActualizarDatos(mercancia, dto.getNombreMercancia(), dto.getCantidadMercancia(), dto.getFechaIngresoMercancia());
+        mercancia.setUsuarioModificacion(usuario);
+        mercancia.setNombreMercancia(dto.getNombreMercancia());
+        mercancia.setCantidadMercancia(dto.getCantidadMercancia());
+        mercancia.setFechaModificacion(LocalDate.now());
+
+        Mercancia actualizada = mercanciaRepository.save(mercancia);
+
+        return mapper.toResponseDTO(actualizada);
+    }
+
+    @Transactional
+    public void eliminarMercancia(Long idMercancia, Long idUsuario) {
+        Mercancia mercancia = mercanciaRepository.findById(idMercancia)
+                .orElseThrow(() -> new NotFoundException("Mercancía no encontrada"));
+        Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new BusinessException("Usuario no encontrado"));
 
-        mercanciaService.validarEliminacion(mercancia, usuario);
+        mercanciaService.validarEliminacion(mercancia.getUsuarioRegistro().getIdUsuario(), usuario.getIdUsuario());
         mercanciaRepository.delete(mercancia);
-        return true;
     }
 
 }

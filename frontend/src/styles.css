@@ -1,1 +1,173 @@
 /* You can add global styles to this file, and also import other style files */
+/* Define CSS variables in the :root selector */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap');
+
+:root {
+
+  --color-primary: #135A8F;
+  --color-secondary: #EB5E1E;
+  --color-orange-light: #EB991E;
+  --color-dark-blue: #4C718E;
+  --color-dark-orange:#635846;
+  --color-dark-primary: #313639;
+
+  --info-background-color: #D6E2FF;
+  --confirm-background-color: #D8EFD1;
+  --error-background-color: #FFDBCC;
+  --info-border-color: #0053A0;
+  --confirm-border-color: #249337;
+  --error-border-color: #8D3800;
+  --security-border-color: #373D92;
+  --security-regular-color: #E0E0FF;
+  --accesibility-regular-color: #249300;
+
+
+  --color-light: #f8f9fa;
+  --color-dark: #212529;
+
+
+  --font-family: 'Montserrat', sans-serif;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+
+  --font-size-title-big: 2.5rem;
+  --font-size-title: 2rem;
+  --font-size-title-small: 1.5rem;
+  --font-size-subtitle: 1.5rem;
+  --font-size-subtitle-small: 1.25rem;
+
+  --font-size-text: 1rem;
+}
+
+
+
+
+/* Titles (h1, h2, h3) */
+h1{
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-title-big);
+  color: var(--color-dark-primary);
+}
+ h2 {
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-title);
+  color: var(--color-dark-primary);
+}
+h3 {
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-title-small);
+  color: var(--color-dark-primary);
+}
+
+/* Subtitles (h4, h5) */
+h4{
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-subtitle);
+  color: var(--color-dark-primary);
+}
+ h5 {
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-subtitle-small);
+  color: var(--color-dark-primary);
+}
+
+/* Regular text */
+p, span, div {
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-text);
+  color: var(--color-dark);
+}
+
+/* Bold text */
+strong {
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-text);
+  color: var(--color-dark);
+}
+
+
+
+select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid var(--color-dark-primary);
+  background-color: var(--color-light);
+  color: var(--color-dark);
+  font-size: 1rem;
+}
+
+/* Button styles */
+button {
+  margin: 15px;
+  background-color: var(--color-secondary);
+  color: var(--color-light);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-bold);
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+table{
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+td{
+  border: 1px solid var(--color-dark-primary);
+  background-color: var(--color-light);
+  padding: 10px;
+  text-align: center;
+}
+th{
+  border: 1px solid var(--color-primary);
+  padding: 10px;
+  text-align: center;
+  background-color: var(--color-primary);
+  color: var(--color-light);
+}
+
+i{
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+i.fa-edit {
+  color: var(--color-orange-light);
+  padding: 5px;
+}
+
+i.fa-info-circle {
+  color: var(--color-primary);
+  padding: 5px;
+}
+
+/* Cambiar el color del ícono de eliminación */
+i.fa-trash {
+  color: var(--color-secondary);
+  padding: 5px;
+}
+
+/* Cambiar el color al pasar el mouse */
+i:hover {
+  color: var(--color-primary);
+}

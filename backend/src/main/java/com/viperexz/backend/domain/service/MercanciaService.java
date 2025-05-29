@@ -24,8 +24,8 @@ public class MercanciaService {
         }
     }
 
-    public void validarEliminacion(Mercancia mercancia, Usuario usuarioSolicitante) {
-        if (!mercancia.getUsuarioRegistro().getIdUsuario().equals(usuarioSolicitante.getIdUsuario())) {
+    public void validarEliminacion(Long idUsuarioMercancia, Long idUsuarioSolicitante) {
+        if (!idUsuarioMercancia.equals(idUsuarioSolicitante)) {
             throw new BusinessException("Solo el usuario que registró la mercancía puede eliminarla.");
         }
     }
@@ -45,9 +45,6 @@ public class MercanciaService {
             throw new BusinessException("La fecha de ingreso no puede ser futura.");
         }
 
-        if (!mercancia.getNombreMercancia().equals(nuevoNombre)) {
-            throw new BusinessException("No se puede cambiar el nombre de la mercancía una vez registrada.");
-        }
     }
 
 }

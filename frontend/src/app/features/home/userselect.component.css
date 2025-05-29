@@ -1,0 +1,42 @@
+@import '../../../styles.css';
+
+
+
+.background {
+  background: linear-gradient(145deg,rgba(235, 94, 30, 1) 0%, rgba(255, 255, 255, 1) 30%, rgba(255, 255, 255, 1) 70%, rgba(19, 90, 143, 1) 100%);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+.user-select-container {
+  display: flex;
+  background: #ffffff;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+  box-shadow: #bdbdbd 0px 0px 10px 2px;
+  border: #212529 solid 1px;
+  padding: 15px;
+}
+
+.headerContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.bodyContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+

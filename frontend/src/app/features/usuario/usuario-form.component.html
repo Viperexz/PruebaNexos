@@ -1,0 +1,49 @@
+<form *ngIf="usuario" #form="ngForm" (ngSubmit)="guardar()">
+  <div class="form-header">
+    <h4>{{ modo === 'crear' ? 'Crear Mercancía' : 'Editar Mercancía' }}</h4>
+  </div>
+  <div class="form-body">
+    <div class="form-group">
+      <label>Nombre:</label>
+      <input
+        type="text"
+        id="nombreMercancia"
+        [(ngModel)]="usuario.nombreUsuario"
+        name="nombreMercancia"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label>Cantidad:</label>
+      <input
+        type="number"
+        [(ngModel)]="usuario.edadUsuario"
+        name="cantidadMercancia"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label>Cantidad:</label>
+      <select [(ngModel)]="idCargoSeleccionado" name="cargoId" required>
+        <option [ngValue]="undefined">Seleccione un usuario</option>
+        <option *ngFor="let cargo of cargos" [ngValue]="cargo.idCargo">
+          {{ cargo.idCargo }} -
+          {{ cargo.nombreCargo }}
+        </option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Fecha de ingreso:</label>
+      <input
+        type="date"
+        [(ngModel)]="usuario.fechaIngresoUsuario"
+        name="fechaIngresoMercancia"
+        required
+      />
+    </div>
+    <div class="acciones">
+      <button type="submit">{{ modo === 'crear' ? 'Guardar' : 'Actualizar' }}</button>
+      <button type="button" (click)="cancelar()">Cancelar</button>
+    </div>
+  </div>
+</form>

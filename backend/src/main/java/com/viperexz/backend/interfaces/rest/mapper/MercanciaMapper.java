@@ -24,7 +24,11 @@ public class MercanciaMapper {
         dto.setNombreMercancia(mercancia.getNombreMercancia());
         dto.setCantidadMercancia(mercancia.getCantidadMercancia());
         dto.setFechaIngresoMercancia(mercancia.getFechaIngresoMercancia());
-        dto.setNombreUsuario(mercancia.getUsuarioRegistro().getNombreUsuario());
+        dto.setNombreUsuarioRegistro(mercancia.getUsuarioRegistro().getNombreUsuario());
+        if (mercancia.getUsuarioModificacion() != null) {
+            dto.setNombreUsuarioModificacion(mercancia.getUsuarioModificacion().getNombreUsuario());
+            dto.setFechaModificacion(mercancia.getFechaModificacion());
+        }
         return dto;
     }
 }

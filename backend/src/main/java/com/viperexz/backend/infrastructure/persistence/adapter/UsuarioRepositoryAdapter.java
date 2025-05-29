@@ -17,10 +17,13 @@ public class UsuarioRepositoryAdapter implements UsuarioRepository {
 
     private final UsuarioJpaRepository jpaRepository;
     private final MercanciaRepositoryAdapter mercanciaRepositoryAdapter;
+    private final CargoRepositoryAdapter cargoRepositoryAdapter;
 
-    public UsuarioRepositoryAdapter(UsuarioJpaRepository jpaRepository, MercanciaRepositoryAdapter mercanciaRepositoryAdapter) {
+    public UsuarioRepositoryAdapter(UsuarioJpaRepository jpaRepository, MercanciaRepositoryAdapter mercanciaRepositoryAdapter,
+                                    CargoRepositoryAdapter cargoRepositoryAdapter) {
         this.jpaRepository = jpaRepository;
         this.mercanciaRepositoryAdapter = mercanciaRepositoryAdapter;
+        this.cargoRepositoryAdapter = cargoRepositoryAdapter;
     }
 
     @Override
@@ -59,20 +62,8 @@ public class UsuarioRepositoryAdapter implements UsuarioRepository {
         usuario.setIdUsuario(entity.getIdUsuario());
         usuario.setNombreUsuario(entity.getNombreUsuario());
         usuario.setEdadUsuario(entity.getEdadUsuario());
-        //#TODO Registrar el cargo del usuario "Pueden aparecer mas cargos en el futuro"
-        /*usuario.setCargoUsuario(entity.getCargo());*/
+        usuario.setCargoUsuario(cargoRepositoryAdapter.toDomain(entity.getCargoUsuario()));
         usuario.setFechaIngresoUsuario(entity.getFechaIngresoUsuario());
-        if (entity.getMercancias() != null) {
-            List<Mercancia> mercancias = entity.getMercancias().stream()
-                    .map(mercanciaEntity -> {
-                        Mercancia mercancia = mercanciaRepositoryAdapter.toDomain(mercanciaEntity);
-                        mercancia.setUsuarioRegistro(usuario);
-                        return mercancia;
-                    })
-                    .collect(Collectors.toList());
-            usuario.setMercanciasUsuario(mercancias);
-        }
-
         return usuario;
     }
 
@@ -81,8 +72,7 @@ public class UsuarioRepositoryAdapter implements UsuarioRepository {
         entity.setIdUsuario(usuario.getIdUsuario());
         entity.setNombreUsuario(usuario.getNombreUsuario());
         entity.setEdadUsuario(usuario.getEdadUsuario());
-        //#TODO Registrar el cargo del usuario "Pueden aparecer mas cargos en el futuro"
-        /*entity.setCargo(usuario.getCargoUsuario());*/
+        entity.setCargoUsuario(cargoRepositoryAdapter.toEntity(usuario.getCargoUsuario()));
         entity.setFechaIngresoUsuario(usuario.getFechaIngresoUsuario());
         return entity;
     }

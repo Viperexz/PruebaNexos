@@ -1,8 +1,10 @@
 package com.viperexz.backend.infrastructure.persistence.adapter;
 
+import com.viperexz.backend.domain.model.Cargo;
 import com.viperexz.backend.domain.model.Mercancia;
 import com.viperexz.backend.domain.model.Usuario;
 import com.viperexz.backend.domain.repository.MercanciaRepository;
+import com.viperexz.backend.infrastructure.persistence.entity.CargoEntity;
 import com.viperexz.backend.infrastructure.persistence.entity.MercanciaEntity;
 import com.viperexz.backend.infrastructure.persistence.entity.UsuarioEntity;
 import com.viperexz.backend.infrastructure.persistence.repository.MercanciaJpaRepository;
@@ -15,10 +17,12 @@ import java.util.Optional;
 @Component
 public class MercanciaRepositoryAdapter implements MercanciaRepository {
     private final MercanciaJpaRepository jpaRepository;
+    private final CargoRepositoryAdapter cargoRepositoryAdapter;
 
 
-    public MercanciaRepositoryAdapter(MercanciaJpaRepository jpaRepository) {
+    public MercanciaRepositoryAdapter(MercanciaJpaRepository jpaRepository, CargoRepositoryAdapter cargoRepositoryAdapter) {
         this.jpaRepository = jpaRepository;
+        this.cargoRepositoryAdapter = cargoRepositoryAdapter;
     }
 
     @Override
@@ -26,6 +30,7 @@ public class MercanciaRepositoryAdapter implements MercanciaRepository {
         return jpaRepository.findById(id)
                 .map(this::toDomain);
     }
+
 
     @Override
     public List<Mercancia> findAll() {
@@ -50,9 +55,10 @@ public class MercanciaRepositoryAdapter implements MercanciaRepository {
 
     @Override
     public void delete(Mercancia mercancia) {
-        MercanciaEntity entity = toEntity(mercancia);
-        jpaRepository.delete(entity);
+        jpaRepository.deleteById(mercancia.getIdMercancia());
     }
+
+
 
     public Mercancia toDomain(MercanciaEntity entity) {
         Mercancia mercancia = new Mercancia();
@@ -66,26 +72,56 @@ public class MercanciaRepositoryAdapter implements MercanciaRepository {
             usuario.setIdUsuario(usuarioEntity.getIdUsuario());
             usuario.setNombreUsuario(usuarioEntity.getNombreUsuario());
             mercancia.setUsuarioRegistro(usuario);
+            CargoEntity cargoEntity = usuarioEntity.getCargoUsuario();
+            if (cargoEntity != null) {
+                Cargo cargo = new Cargo();
+                cargo.setIdCargo(cargoEntity.getIdCargo());
+                cargo.setNombreCargo(cargoEntity.getNombreCargo());
+                usuario.setCargoUsuario(cargo);
+            }
         }
-        mercancia.setIdMercancia(entity.getIdMercancia());
+        UsuarioEntity usuarioModificacionEntity = entity.getUsuarioModificacion();
+        if(usuarioModificacionEntity != null) {
+            Usuario usuarioModificacion = new Usuario();
+            usuarioModificacion.setIdUsuario(usuarioModificacionEntity.getIdUsuario());
+            usuarioModificacion.setNombreUsuario(usuarioModificacionEntity.getNombreUsuario());
+            CargoEntity cargoEntity = usuarioEntity.getCargoUsuario();
+            if (cargoEntity != null) {
+                Cargo cargo = new Cargo();
+                cargo.setIdCargo(cargoEntity.getIdCargo());
+                cargo.setNombreCargo(cargoEntity.getNombreCargo());
+                usuarioModificacion.setCargoUsuario(cargo);
+            }
+            mercancia.setUsuarioModificacion(usuarioModificacion);
+        }
+        mercancia.setFechaModificacion(entity.getFechaModificacion());
+
         return mercancia;
     }
 
     public MercanciaEntity toEntity(Mercancia mercancia) {
         MercanciaEntity entity = new MercanciaEntity();
+        entity.setIdMercancia(mercancia.getIdMercancia()); // ✔ IMPORTANTE
         entity.setNombreMercancia(mercancia.getNombreMercancia());
         entity.setCantidadMercancia(mercancia.getCantidadMercancia());
         entity.setFechaIngresoMercancia(mercancia.getFechaIngresoMercancia());
+
         if (mercancia.getUsuarioRegistro() != null) {
             UsuarioEntity usuarioEntity = new UsuarioEntity();
-            usuarioEntity.setIdUsuario(mercancia.getUsuarioRegistro().getIdUsuario());
+            usuarioEntity.setIdUsuario(mercancia.getUsuarioRegistro().getIdUsuario()); // Solo ID
             usuarioEntity.setNombreUsuario(mercancia.getUsuarioRegistro().getNombreUsuario());
-            usuarioEntity.setEdadUsuario(mercancia.getUsuarioRegistro().getEdadUsuario());
-            //#TODO Registrar el cargo del usuario "Pueden aparecer mas cargos en el futuro"
-            /*usuarioEntity.setCargo(mercancia.getUsuarioRegistro().getCargoUsuario());*/
-            usuarioEntity.setFechaIngresoUsuario(mercancia.getUsuarioRegistro().getFechaIngresoUsuario());
             entity.setUsuarioRegistro(usuarioEntity);
         }
+
+        if (mercancia.getUsuarioModificacion() != null) {
+            UsuarioEntity usuarioEntity = new UsuarioEntity();
+            usuarioEntity.setIdUsuario(mercancia.getUsuarioModificacion().getIdUsuario()); // Solo ID
+            usuarioEntity.setNombreUsuario(mercancia.getUsuarioModificacion().getNombreUsuario());
+            entity.setUsuarioModificacion(usuarioEntity);
+        }
+
+        entity.setFechaModificacion(mercancia.getFechaModificacion());
         return entity;
     }
+
 }

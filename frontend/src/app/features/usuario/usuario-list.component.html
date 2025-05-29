@@ -1,0 +1,59 @@
+<div>
+<div class="header">
+  <h2>Listado de Usuarios</h2>
+  <div class="actions">
+    <Button (click)="createUsuario()" class="btn btn-primary">Crear Cargo</Button>
+  </div>
+</div><div class="body">
+<table>
+  <thead>
+  <tr>
+    <th>Nombre</th>
+    <th>Edad</th>
+    <th>Fecha Ingreso</th>
+    <th>Cargo</th>
+    <th>Acciones</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let m of usuario">
+    <td>{{ m.nombreUsuario }}</td>
+    <td>{{ m.edadUsuario }}</td>
+    <td>{{ m.fechaIngresoUsuario }}</td>
+    <td>{{m.cargoUsuario}}</td>
+    <td>
+      <a (click)="editUsuario(m.idUsuario)" title="Editar" class="edit-link">
+        <i class="fas fa-edit"></i>
+      </a>
+      <a (click)="detailsUsuario(m.idUsuario)" title="Detalles">
+        <i class="fas fa-info-circle"></i>
+      </a>
+      <a (click)="deleteUsuario(m.idUsuario)" title="Eliminar" style="cursor: pointer;">
+        <i class="fas fa-trash"></i>
+      </a>
+    </td>
+  </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+<app-notification
+  *ngIf="showNotification"
+  [type]="notificationType"
+  [title]="'Error'"
+  [message]="notificationMessage"
+  (onClose)="closeNotification()">
+</app-notification>
+
+<!-- Modal -->
+<div class="modal" [class.show]="modalFormVisible" (click)="cerrarModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <app-usuario-form
+      [modo]="modoForm"
+      [usuario]="usuarioActual"
+      (onGuardar)="guardarUsuario($event)"
+      (onCancelar)="cerrarModal()">
+    </app-usuario-form>
+  </div>
+</div>

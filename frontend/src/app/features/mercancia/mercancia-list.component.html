@@ -1,0 +1,59 @@
+<div>
+  <div class="header">
+    <h2>Listado de Mercancías</h2>
+    <div class="actions">
+      <Button (click)="createMercancia()" class="btn btn-primary">Crear Mercancía</Button>
+    </div>
+  </div>
+  <div class="body">
+    <table>
+      <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Cantidad</th>
+        <th>Fecha</th>
+        <th>Usuario registro</th>
+        <th>Acciones</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let m of mercancias">
+        <td>{{ m.nombreMercancia }}</td>
+        <td>{{ m.cantidadMercancia }}</td>
+        <td>{{ m.fechaIngresoMercancia }}</td>
+        <td>{{ m.nombreUsuarioRegistro}}</td>
+        <td>
+          <a (click)="editMercancia(m.idMercancia)" title="Editar" class="edit-link">
+            <i class="fas fa-edit"></i>
+          </a>
+          <a (click)="detailsMercancia(m.idMercancia)" title="Detalles">
+            <i class="fas fa-info-circle"></i>
+          </a>
+          <a (click)="deleteMercancia(m.idMercancia)" title="Eliminar" style="cursor: pointer;">
+            <i class="fas fa-trash"></i>
+          </a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<app-notification
+  *ngIf="showNotification"
+  [type]="notificationType"
+  [title]="'Error'"
+  [message]="notificationMessage"
+  (onClose)="closeNotification()">
+</app-notification>
+
+<!-- Modal -->
+<div class="modal" [class.show]="modalFormVisible" (click)="cerrarModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <app-mercancia-form
+      [modo]="modoForm"
+      [mercancia]="mercanciaActual"
+      (onGuardar)="guardarMercancia($event)"
+      (onCancelar)="cerrarModal()">
+    </app-mercancia-form>
+  </div>
+</div>

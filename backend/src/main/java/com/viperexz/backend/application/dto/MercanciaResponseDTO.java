@@ -10,5 +10,7 @@ public class MercanciaResponseDTO {
     private String nombreMercancia;
     private int cantidadMercancia;
     private LocalDate fechaIngresoMercancia;
-    private String nombreUsuario;
+    private String nombreUsuarioRegistro;
+    private String nombreUsuarioModificacion;
+    private LocalDate fechaModificacion;
 }

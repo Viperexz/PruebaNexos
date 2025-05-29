@@ -1,0 +1,30 @@
+<aside class="sidebar">
+  <div class="logo">
+    <img ngSrc="/assets/images/logo.png" alt="Logo" height="400" width="1400"/>
+  </div>
+  <nav>
+    <ul>
+      <li>
+        <a routerLink="/app/usuarios" title="Usuarios">
+          <span class="link-text">Usuarios</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/app/mercancias" title="Mercancías">
+          <span class="link-text">Mercancías</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/app/cargos" title="Cargos">
+          <span class="link-text">Cargos</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <div class="footer">
+  <p class="userName">{{usuarioActivo.nombreUsuario}}</p>
+    <a routerLink="" title="cerrar">
+      <span class="link-text">Cerrar sesión</span>
+    </a>
+  </div>
+</aside>

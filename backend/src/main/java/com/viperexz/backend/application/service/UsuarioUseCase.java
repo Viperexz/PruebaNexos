@@ -6,6 +6,7 @@ import com.viperexz.backend.domain.model.Usuario;
 import com.viperexz.backend.domain.repository.UsuarioRepository;
 import com.viperexz.backend.exception.BusinessException;
 import com.viperexz.backend.exception.NotFoundException;
+import com.viperexz.backend.interfaces.rest.mapper.CargoMapper;
 import com.viperexz.backend.interfaces.rest.mapper.UsuarioMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
@@ -59,11 +60,9 @@ public class UsuarioUseCase {
    public UsuarioResponseDTO actualizarUsuario(UsuarioResponseDTO dto, Long idUsuario) {
        Usuario usuario = usuarioRepository.findById(idUsuario)
                .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
-
        // Update user data
        usuario.setNombreUsuario(dto.getNombreUsuario());
        usuario.setEdadUsuario(dto.getEdadUsuario());
-       usuario.setCargoUsuario(dto.getCargoUsuario());
        usuario.setFechaIngresoUsuario(dto.getFechaIngresoUsuario());
 
        Usuario actualizado = usuarioRepository.save(usuario);

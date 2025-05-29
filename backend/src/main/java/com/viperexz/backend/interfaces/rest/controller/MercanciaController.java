@@ -15,40 +15,61 @@ import java.util.List;
 public class MercanciaController {
 
     private final MercanciaUseCase mercanciaUseCase;
+    
 
 
     public MercanciaController(MercanciaUseCase crearMercanciaUseCase) {
         this.mercanciaUseCase = crearMercanciaUseCase;
     }
 
-    @PostMapping
-    public ResponseEntity<MercanciaResponseDTO> registrarMercancia(@RequestBody MercanciaRequestDTO requestDTO) {
-        MercanciaResponseDTO responseDTO = mercanciaUseCase.registrarMercancia(requestDTO);
-        return ResponseEntity.ok(responseDTO);
-    }
+  @PostMapping
+  public ResponseEntity<?> registrarMercancia(@RequestBody MercanciaRequestDTO requestDTO) {
+      try {
+          MercanciaResponseDTO responseDTO = mercanciaUseCase.registrarMercancia(requestDTO);
+          return ResponseEntity.ok(responseDTO);
+      } catch (Exception e) {
+          return ResponseEntity.badRequest().body(e.getMessage());
+      }
+  }
 
-    @GetMapping
-    public ResponseEntity<List<MercanciaResponseDTO>> obtenerMercancias() {
-        List<MercanciaResponseDTO> mercancias = mercanciaUseCase.consultarTodos();
-        return ResponseEntity.ok(mercancias);
-    }
+  @GetMapping
+  public ResponseEntity<?> obtenerMercancias() {
+      try {
+          List<MercanciaResponseDTO> mercancias = mercanciaUseCase.consultarTodos();
+          return ResponseEntity.ok(mercancias);
+      } catch (Exception e) {
+          return ResponseEntity.badRequest().body(e.getMessage());
+      }
+  }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<MercanciaResponseDTO> obtenerMercancia(@PathVariable Long id) {
-        MercanciaResponseDTO responseDTO = mercanciaUseCase.consultarPorId(id);
-        return ResponseEntity.ok(responseDTO);
-    }
+  @GetMapping("/{id}")
+  public ResponseEntity<?> obtenerMercancia(@PathVariable Long id) {
+      try {
+          MercanciaResponseDTO responseDTO = mercanciaUseCase.consultarPorId(id);
+          return ResponseEntity.ok(responseDTO);
+      } catch (Exception e) {
+          return ResponseEntity.badRequest().body(e.getMessage());
+      }
+  }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<MercanciaResponseDTO> actualizarMercancia(@PathVariable("id") Long id, @RequestBody MercanciaRequestDTO requestDTO) {
-        MercanciaResponseDTO responseDTO = mercanciaUseCase.actualizarMercancia(requestDTO,id);
-        return ResponseEntity.ok(responseDTO);
-    }
+  @PutMapping("/{idMercancia}/usuario/{idUsuario}")
+  public ResponseEntity<?> actualizarMercancia(@PathVariable("idMercancia") Long idMercancia, @PathVariable("idUsuario") Long idUsuario, @RequestBody MercanciaRequestDTO requestDTO) {
+      try {
+          MercanciaResponseDTO responseDTO = mercanciaUseCase.actualizarMercancia(requestDTO, idMercancia, idUsuario);
+          return ResponseEntity.ok(responseDTO);
+      } catch (Exception e) {
+          return ResponseEntity.badRequest().body(e.getMessage());
+      }
+  }
 
- @DeleteMapping("/{idMercancia}/usuario/{idUsuario}")
- public ResponseEntity<Void> eliminarMercancia(@PathVariable("idMercancia") Long idMercancia, @PathVariable("idUsuario") Long idUsuario) {
-     mercanciaUseCase.eliminarMercancia(idMercancia, idUsuario);
-     return ResponseEntity.noContent().build();
- }
+  @DeleteMapping("/{idMercancia}/usuario/{idUsuario}")
+  public ResponseEntity<?> eliminarMercancia(@PathVariable("idMercancia") Long idMercancia, @PathVariable("idUsuario") Long idUsuario) {
+      try {
+          mercanciaUseCase.eliminarMercancia(idMercancia, idUsuario);
+          return ResponseEntity.noContent().build();
+      } catch (Exception e) {
+          return ResponseEntity.badRequest().body(e.getMessage());
+      }
+  }
 
 }

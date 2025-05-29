@@ -14,7 +14,7 @@ public class Usuario {
     private Long idUsuario;
     private String nombreUsuario;
     private int edadUsuario;
-    private String cargoUsuario;
+    private Cargo cargoUsuario;
     private LocalDate fechaIngresoUsuario;
     private List<Mercancia> mercanciasUsuario;
 }

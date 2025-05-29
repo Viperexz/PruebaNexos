@@ -21,32 +21,52 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UsuarioResponseDTO> obtenerUsuario(@PathVariable Long id) {
-        UsuarioResponseDTO responseDTO = usuarioUseCase.consultarPorId(id);
-        return ResponseEntity.ok(responseDTO);
+    public ResponseEntity<?> obtenerUsuario(@PathVariable Long id) {
+        try {
+            UsuarioResponseDTO responseDTO = usuarioUseCase.consultarPorId(id);
+            return ResponseEntity.ok(responseDTO);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping
-    public ResponseEntity<List<UsuarioResponseDTO>> obtenerTodosLosUsuarios() {
-        List<UsuarioResponseDTO> usuarios = usuarioUseCase.consultarTodos();
-        return ResponseEntity.ok(usuarios);
+    public ResponseEntity<?> obtenerTodosLosUsuarios() {
+        try {
+            List<UsuarioResponseDTO> usuarios = usuarioUseCase.consultarTodos();
+            return ResponseEntity.ok(usuarios);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping
-    public ResponseEntity<UsuarioResponseDTO> registrarUsuario(@RequestBody UsuarioRequestDTO requestDTO) {
-        UsuarioResponseDTO responseDTO = usuarioUseCase.registrarUsuario(requestDTO);
-        return ResponseEntity.ok(responseDTO);
+    public ResponseEntity<?> registrarUsuario(@RequestBody UsuarioRequestDTO requestDTO) {
+        try {
+            UsuarioResponseDTO responseDTO = usuarioUseCase.registrarUsuario(requestDTO);
+            return ResponseEntity.ok(responseDTO);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UsuarioResponseDTO> actualizarUsuario(@PathVariable("id") Long id, @RequestBody UsuarioResponseDTO requestDTO) {
-        UsuarioResponseDTO responseDTO = usuarioUseCase.actualizarUsuario(requestDTO,id);
-        return ResponseEntity.ok(responseDTO);
+    public ResponseEntity<?> actualizarUsuario(@PathVariable("id") Long id, @RequestBody UsuarioResponseDTO requestDTO) {
+        try {
+            UsuarioResponseDTO responseDTO = usuarioUseCase.actualizarUsuario(requestDTO, id);
+            return ResponseEntity.ok(responseDTO);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{idUsuario}")
-    public ResponseEntity<Void> eliminarUsuario(@PathVariable("idUsuario") Long idUsuario) {
-        usuarioUseCase.eliminarUsuario(idUsuario);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> eliminarUsuario(@PathVariable("idUsuario") Long idUsuario) {
+        try {
+            usuarioUseCase.eliminarUsuario(idUsuario);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

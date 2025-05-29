@@ -1,0 +1,27 @@
+<div class="background">
+  <div class="user-select-container">
+    <div class="headerContainer">
+      <img ngSrc="/assets/images/logo.png" alt="Logo" class="logo" height="100" width="336">
+      <h5>Bienvenido al servicio de gestión de inventarios</h5>
+      <p>Para comenzar, selecciona un usuario de la lista.</p>
+    </div>
+    <div class="bodyContainer">
+      <select [(ngModel)]="idUsuarioSeleccionado">
+        <option [ngValue]="undefined">Seleccione un usuario</option>
+        <option *ngFor="let usuario of usuarios" [ngValue]="usuario.idUsuario">
+          {{ usuario.nombreUsuario }}
+        </option>
+      </select>
+      <button (click)="seleccionarUsuario()">Continuar</button>
+
+      <!-- Notificación -->
+      <app-notification
+        *ngIf="showNotification"
+        [type]="'error'"
+        [title]="'Error'"
+        [message]="'Por favor, selecciona un usuario antes de continuar.'"
+        (onClose)="closeNotification()">
+      </app-notification>
+    </div>
+  </div>
+</div>
