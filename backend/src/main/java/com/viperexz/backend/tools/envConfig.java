@@ -10,7 +10,7 @@ import java.nio.file.Paths;
 public class envConfig {
     static {
         try {
-            Path projectRoot = Paths.get("").toAbsolutePath().getParent();
+            Path projectRoot = Paths.get("").toAbsolutePath();
             Path envPath = projectRoot.resolve(".env");
 
             System.out.println("Cargando archivo .env desde: " + envPath);
